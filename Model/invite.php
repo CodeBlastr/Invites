@@ -16,7 +16,7 @@ class Invite extends InviteAppModel {
  */
 	public $belongsTo = array(
 		'User' => array(
-			'className' => 'User',
+			'className' => 'Users.User',
 			'foreignKey' => 'user_id',
 			'conditions' => '',
 			'fields' => '',
