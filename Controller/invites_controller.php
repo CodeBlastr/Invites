@@ -48,8 +48,8 @@ var $helpers = array('Session', 'Facebook.facebook');
 
 	function invitation() {
 		//copy implementation fronm the following function	
-		if(isset($this->data['Invite']['emails'])){
-			$toemails = explode(",",trim($this->data['Invite']['emails'],","));
+		if(isset($this->request->data['Invite']['emails'])){
+			$toemails = explode(",",trim($this->request->data['Invite']['emails'],","));
 			$emials = array();
 			$emails_tosave = '';
 			foreach($toemails as $email){
@@ -59,25 +59,25 @@ var $helpers = array('Session', 'Facebook.facebook');
 			}
 			$emails_tosave = trim($emails_tosave,",");
 			$user_id = $this->InviteHandler->getUserId();
-			$this->data['Invite']['user_id'] = $user_id;
+			$this->request->data['Invite']['user_id'] = $user_id;
 			//get referral_code
 			$reference_code = $this->Invite->User->generateReferalCode($user_id);			
 			
-			$this->data['Invite']['emails'] = $emails_tosave;
+			$this->request->data['Invite']['emails'] = $emails_tosave;
 			
-			if($this->Invite->save($this->data)){
+			if($this->Invite->save($this->request->data)){
 				$subject = Inflector::humanize($_SERVER['SERVER_NAME']);
 				$message = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).'! http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code;
 				$sentCount = $this->__sendMail($emails, $subject, $message,  'welcome');
 				$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.');	
 			}
 		} else {
-			if (!empty($this->data['Referral'])) {
+			if (!empty($this->request->data['Referral'])) {
 				//check if email value is zero
 				$emails = array();
-				foreach($this->data['Referral'] as $contact_key => $contact){
+				foreach($this->request->data['Referral'] as $contact_key => $contact){
 					if($contact['email'] == '0')
-						unset($this->data['Referral'][$contact_key]);
+						unset($this->request->data['Referral'][$contact_key]);
 					else
 						$emails[$contact_key] = $contact;
 				}
@@ -87,7 +87,7 @@ var $helpers = array('Session', 'Facebook.facebook');
 				foreach($emails as $email){
 					$email_str .= $email['email'] . ',';	
 				}
-				$this->data['Invite']['emails'] = $email_str;
+				$this->request->data['Invite']['emails'] = $email_str;
 			}
 		}	
 		
@@ -113,9 +113,9 @@ var $helpers = array('Session', 'Facebook.facebook');
 	function import_contacts(){
 		$request = array();
 
-		$login = isset($this->data['Referral']['login']) ? $this->data['Referral']['login'] : '' ;
-		$password = isset($this->data['Referral']['password']) ? $this->data['Referral']['password'] : '' ; 
-		$service = isset($this->data['Referral']['service']) ? $this->data['Referral']['service'] : '' ;	
+		$login = isset($this->request->data['Referral']['login']) ? $this->request->data['Referral']['login'] : '' ;
+		$password = isset($this->request->data['Referral']['password']) ? $this->request->data['Referral']['password'] : '' ; 
+		$service = isset($this->request->data['Referral']['service']) ? $this->request->data['Referral']['service'] : '' ;	
 
 		switch ($service) {
 			case 'Gmail':
@@ -237,7 +237,7 @@ var $helpers = array('Session', 'Facebook.facebook');
 		    	App::import('Vendor','Varien', array('file' => 'Varien' . DS . 'Csv.php'));
 		    	
 				$parser = new Varien_File_Csv();
-				$data = $parser->getData($this->data['Referral']['outlook']['tmp_name']);
+				$data = $parser->getData($this->request->data['Referral']['outlook']['tmp_name']);
 
 				foreach ($data as $i => $row) {
 				    if (count($row) < 3) {
