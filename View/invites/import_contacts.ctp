@@ -21,9 +21,9 @@
 					<tr>
 						<td> 
 						<?php 
-							echo $form->checkbox("Referral.{$ck}.email", array('div'=>'false', 'label'=>'false', 'class' => 'select', 'value' => $contact['email']));
-							echo $form->hidden("Referral.{$ck}.first_name", array('value' => $name[0]));
-							echo $form->hidden("Referral.{$ck}.last_name", array('value' => !empty($name[1]) ? $name[1] : '' ));
+							echo $this->Form->checkbox("Referral.{$ck}.email", array('div'=>'false', 'label'=>'false', 'class' => 'select', 'value' => $contact['email']));
+							echo $this->Form->hidden("Referral.{$ck}.first_name", array('value' => $name[0]));
+							echo $this->Form->hidden("Referral.{$ck}.last_name", array('value' => !empty($name[1]) ? $name[1] : '' ));
 						?>
 						</td>
 						<td><?php echo $contact['email']; ?>&nbsp;</td>

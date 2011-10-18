@@ -21,6 +21,6 @@
 } else {
 	echo '<p>'.$fb_invite_info['fb_before_login_invite_text'].'</p>';
 	echo '<br />';
-	echo $facebook->login(array('perms' => 'email,publish_stream', 'redirect' => $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]));
+	echo $this->Facebook->login(array('perms' => 'email,publish_stream', 'redirect' => $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]));
 }
 ?>

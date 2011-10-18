@@ -6,8 +6,8 @@
 
 <h2>Invite Friends</h2>
 <?php
-	echo $form->create('Invite');
-	echo $form->input('Invite.emails', array('label' => 'Email Addresses', 'after' => '<div class="floatRight divRightWidth">
+	echo $this->Form->create('Invite');
+	echo $this->Form->input('Invite.emails', array('label' => 'Email Addresses', 'after' => '<div class="floatRight divRightWidth">
 				<span class="textColorGrey">Import your contacts with their email addresses directly from your favorite mail service.</span>
 				<p><a href="#importContacts" value="Gmail" class="import"><img src="../images/email/gmail.gif" /></a>
 				<a href="#importContacts" value="Yahoo" class="import"><img class="imgPointer" src="../images/email/yahoo.gif" /></a></p>
@@ -15,10 +15,10 @@
 				<a href="#importContacts" value="Aol" class="import"><img class="imgPointer" src="../images/email/aol.jpg" /></a></p>
 				<p><a href="#importContacts" value="Outlook" class="import"><img class="imgPointer" src="../images/email/outlook.gif" /></a></p>
 				</div>'));
-	echo $form->button('Send!', array('type'=>'submit', 'class'=>'button'));
-	echo $form->end();
+	echo $this->Form->button('Send!', array('type'=>'submit', 'class'=>'button'));
+	echo $this->Form->end();
 ?>
-<?php  echo $this->element('facebookInviter', array('fb_invite_info' => $fb_invite_info)); ?>
+<?php  echo $this->Element('facebookInviter', array('fb_invite_info' => $fb_invite_info)); ?>
 
 <!-- FancyBox Div for contacts import from different mail services -->
 
@@ -33,13 +33,13 @@
 						echo $this->Form->create('Referral', array('url' => 'import_contacts', 'id' => 'importGmail'));
 					?>
 					<p>E-mail:</p>
-	                <p><?php echo $form->input('login', array('label' => false, 'class' => 'required')); ?></p>
+	                <p><?php echo $this->Form->input('login', array('label' => false, 'class' => 'required')); ?></p>
 	                <p>Password:</p>
-	                <p><?php echo $form->input('password', array('class' => 'required', 'label' => false)); ?></p>
+	                <p><?php echo $this->Form->input('password', array('class' => 'required', 'label' => false)); ?></p>
 					<?php 	
-						echo $form->hidden('service', array('value' => 'Gmail'));
-						echo $form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
-						//echo $form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
+						echo $this->Form->hidden('service', array('value' => 'Gmail'));
+						echo $this->Form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
+						//echo $this->Form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
 						echo $this->Form->end();
 						  
 					?>
@@ -53,13 +53,13 @@
 						echo $this->Form->create('Referral', array('url' => 'import_contacts', 'id' => 'importYahoo'));
 					?>
 					<p>E-mail:</p>
-	                <p><?php echo $form->input('login', array('label' => false, 'class' => 'required')); ?></p>
+	                <p><?php echo $this->Form->input('login', array('label' => false, 'class' => 'required')); ?></p>
 	                <p>Password:</p>
-	                <p><?php echo $form->input('password', array('class' => 'required', 'label' => false)); ?></p>
+	                <p><?php echo $this->Form->input('password', array('class' => 'required', 'label' => false)); ?></p>
 					<?php 	
-						echo $form->hidden('service', array('value' => 'Yahoo'));
-						echo $form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
-						//echo $form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
+						echo $this->Form->hidden('service', array('value' => 'Yahoo'));
+						echo $this->Form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
+						//echo $this->Form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
 						echo $this->Form->end();
 					?>
 					<div id="importYahooError" style="display: none;"><font color="red"> Fill All Fields Required. </font></div>	
@@ -70,9 +70,9 @@
 	                <p><img src="../images/email/msn-hotmail.png" /></p>	
 					<?php
 						echo $this->Form->create('Referral', array('url' => 'import_contacts', 'id' => 'importHotmail'));
-						echo $form->hidden('service', array('value' => 'Hotmail'));
-						echo $form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
-						//echo $form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
+						echo $this->Form->hidden('service', array('value' => 'Hotmail'));
+						echo $this->Form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
+						//echo $this->Form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
 						echo $this->Form->end();
 					?>
 					<div id="importHotmailError" style="display: none;"><font color="red"> Fill All Fields Required. </font></div>
@@ -85,13 +85,13 @@
 						echo $this->Form->create('Referral', array('url' => 'import_contacts', 'id' => 'importAol'));
 					?>
 					<p>E-mail:</p>
-	                <p><?php echo $form->input('login', array('label' => false, 'class' => 'required')); ?></p>
+	                <p><?php echo $this->Form->input('login', array('label' => false, 'class' => 'required')); ?></p>
 	                <p>Password:</p>
-	                <p><?php echo $form->input('password', array('class' => 'required', 'label' => false)); ?></p>
+	                <p><?php echo $this->Form->input('password', array('class' => 'required', 'label' => false)); ?></p>
 					<?php 
-						echo $form->hidden('service', array('value' => 'Aol'));
-						echo $form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
-						//echo $form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
+						echo $this->Form->hidden('service', array('value' => 'Aol'));
+						echo $this->Form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
+						//echo $this->Form->submit('', array('type'=>'image','src' => '/images/buttons/import_lb1.jpg', 'class' => 'contactsImport'));
 						echo $this->Form->end();
 					?>
 					<div id="importAolError" style="display: none;"><font color="red"> Fill All Fields Required. </font></div>	
@@ -105,10 +105,10 @@
 					?>
 					<p>Download csv file:</p>
 					<?php 
-						echo $form->file('outlook', array('class' => 'required'));
-						echo $form->hidden('service', array('value' => 'Outlook'));
-						echo $form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
-						//echo $form->submit('', array('type'=>'image','src' => '/images/buttons/download_lb1.jpg', 'class' => 'contactsImport'));
+						echo $this->Form->file('outlook', array('class' => 'required'));
+						echo $this->Form->hidden('service', array('value' => 'Outlook'));
+						echo $this->Form->submit(__('Import Contacts', true), array('class' => 'contactsImport'));
+						//echo $this->Form->submit('', array('type'=>'image','src' => '/images/buttons/download_lb1.jpg', 'class' => 'contactsImport'));
 						echo $this->Form->end();
 					?>
 					

@@ -17,7 +17,7 @@ class InvitesController extends InviteAppController {
  * @access public
  */
 	var $components = array( 'Auth', 'Session', 'Invite.InviteHandler');
-var $helpers = array('Session', 'Facebook.facebook');
+	var $helpers = array('Session', 'Facebook.Facebook');
 /**
  * beforeFilter callback
  *
