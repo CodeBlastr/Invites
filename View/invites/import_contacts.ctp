@@ -1,5 +1,5 @@
 <div id="importedContacts">
-	<h1><?php __('Imported Contacts'); ?></h1>
+	<h1><?php echo __('Imported Contacts'); ?></h1>
 	<?php 
 		if(!empty($contacts['users'])) { 
 			echo $this->Form->create('Referral', array('url' => 'invitation'));
