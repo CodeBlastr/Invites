@@ -120,15 +120,18 @@
     <div id="dialog-overlay" class="dialog-overlay"></div>
 </div>	
 
-<script>
+<script type="text/javascript">
 
 	$("a.import").fancybox();
 
-	$('#import-dialog-accordion').accordion({ clearStyle: true , autoHeight: false });
-	
 	$('a.import').find('img').each(function(i, e) {
         $(e).click(function() {
-            $('#import-dialog-accordion').accordion('activate', i);
+            $('#import-dialog-accordion').accordion({
+            			clearStyle: true, 
+                		autoHeight: false,
+                		animated: false,
+                		active: i
+                	});
         });
     });
 
