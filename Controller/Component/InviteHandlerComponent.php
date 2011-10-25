@@ -23,6 +23,7 @@ class InviteHandlerComponent extends Object {
     }
 	
 	function initialize($controller) { }
+	function beforeRedirect() { }
 	function beforeRender($viewFile) { }
 	function shutdown() { }
 
