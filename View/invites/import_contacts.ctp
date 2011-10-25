@@ -42,6 +42,7 @@
 				echo "<h3>{$contacts['error']}</h3>";
 			} else {
 				echo "<h3>No Data Found</h3>";
+				echo $this->Html->link('Try Again', 'invite/invites/invitation');
 			}
 		} 
 	?>

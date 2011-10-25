@@ -34,7 +34,7 @@ class InvitesController extends InviteAppController {
 
 
 /**
- * Display the basic invitation-screen /views/invite/index.ctp 
+ * Display the basic invitation-screen /views/invite/index.ctp
  *
  * Customize this page by either:
 *  - editing the existing plugin view: /app/plugins/invite/views/invite/index.ctp
@@ -47,7 +47,7 @@ class InvitesController extends InviteAppController {
 	public function index(){}
 
 	function invitation() {
-		//copy implementation fronm the following function	
+		//copy implementation fronm the following function
 		if(isset($this->request->data['Invite']['emails'])){
 			$toemails = explode(",",trim($this->request->data['Invite']['emails'],","));
 			$emials = array();
@@ -55,21 +55,21 @@ class InvitesController extends InviteAppController {
 			foreach($toemails as $email){
 				//TODO:validate $email
 				$emails[$email] = '';	//since no name is specified
-				$emails_tosave = $email.",";			
+				$emails_tosave = $email.",";
 			}
 			$emails_tosave = trim($emails_tosave,",");
 			$user_id = $this->InviteHandler->getUserId();
 			$this->request->data['Invite']['user_id'] = $user_id;
 			//get referral_code
-			$reference_code = $this->Invite->User->generateReferalCode($user_id);			
-			
+			$reference_code = $this->Invite->User->generateReferalCode($user_id);
+
 			$this->request->data['Invite']['emails'] = $emails_tosave;
-			
+
 			if($this->Invite->save($this->request->data)){
 				$subject = Inflector::humanize($_SERVER['SERVER_NAME']);
 				$message = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).'! http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code;
 				$sentCount = $this->__sendMail($emails, $subject, $message,  'welcome');
-				$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.');	
+				$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.');
 			}
 		} else {
 			if (!empty($this->request->data['Referral'])) {
@@ -81,32 +81,32 @@ class InvitesController extends InviteAppController {
 					else
 						$emails[$contact_key] = $contact;
 				}
-				
+
 				$email_str = '';
 				//create a formated string to send emails
 				foreach($emails as $email){
-					$email_str .= $email['email'] . ',';	
+					$email_str .= $email['email'] . ',';
 				}
 				$this->request->data['Invite']['emails'] = $email_str;
 			}
-		}	
-		
+		}
+
 		$fb_invite_info = array();
 		$server_name = env("SERVER_NAME");
-		
+
 		$fb_invite_info['fb_invite_action']="http://".$server_name;
 		$fb_invite_info['fb_invite_action_text']="Invite your friends to ".Inflector::humanize($_SERVER['SERVER_NAME'])."!";
 		$fb_invite_info['fb_invite_content']="Would you like to join me at ".Inflector::humanize($_SERVER['SERVER_NAME'])."?";
 		$fb_invite_info['fb_req_choice_yes_url'] = "http://".$server_name;
 		$fb_invite_info['fb_req_choice_no_url']= "http://".$server_name;
 		$fb_invite_info['fb_before_login_invite_text']="If you have a facebook account, you can easily invite your friends and email contacts to join you on your ".Inflector::humanize($_SERVER['SERVER_NAME'])." account.";
-			
-		
-		$this->set(compact('fb_invite_info'));	
+
+
+		$this->set(compact('fb_invite_info'));
 	}
 
 	/*
-	 * Import Contacts is used to get contacts from different 
+	 * Import Contacts is used to get contacts from different
 	 * email services eg. gmail, yahoo, hotmail
 	 * returns contacts array()
 	 */
@@ -114,13 +114,13 @@ class InvitesController extends InviteAppController {
 		$request = array();
 
 		$login = isset($this->request->data['Referral']['login']) ? $this->request->data['Referral']['login'] : '' ;
-		$password = isset($this->request->data['Referral']['password']) ? $this->request->data['Referral']['password'] : '' ; 
-		$service = isset($this->request->data['Referral']['service']) ? $this->request->data['Referral']['service'] : '' ;	
+		$password = isset($this->request->data['Referral']['password']) ? $this->request->data['Referral']['password'] : '' ;
+		$service = isset($this->request->data['Referral']['service']) ? $this->request->data['Referral']['service'] : '' ;
 
 		switch ($service) {
 			case 'Gmail':
-				
-				#include vendor file because two files of same vendor can't includes at same time. 
+
+				#include vendor file because two files of same vendor can't includes at same time.
 				include_once '..' . DS . '..' . DS . 'vendors' . DS . 'Svetlozar' . DS . 'init.php';
 				App::import('Vendor','Svetlozar', array('file' => 'Svetlozar' . DS . 'Contacts' . DS . 'Gmail.php'));
 				$gmail = new Gmail($login, $password);
@@ -130,18 +130,18 @@ class InvitesController extends InviteAppController {
 				if(!empty($contacts_array)) {
 					foreach($gmail->contacts as $con_key => $con_val) {
 						$contacts[$con_key] = array(
-									'first_name' => $gmail->names[$con_key], 
-									'email' => $gmail->emails[$con_key],							
-								);	
+									'first_name' => $gmail->names[$con_key],
+									'email' => $gmail->emails[$con_key],
+								);
 					}
 					$request['users'] = $contacts;
 				} else {
 					//$request['error'] = "Login Failed.";
 					$this->Session->setFlash(__('Login Failed.', true));
-					$this->redirect(array('action' => 'index'));
+					$this->redirect(array('action' => 'invitation'));
 				}
 				break;
-				
+
 		    case 'Yahoo':
 				App::import('Vendor','Refer', array('file' => 'Refer' . DS . 'Yahoo.php'));
 				try {
@@ -187,19 +187,19 @@ class InvitesController extends InviteAppController {
 				    if (!$contacts) {
 				        throw new Exception('Your contact list is empty.');
 				    }
-				    
-				    //sorting contacts in required format 
+
+				    //sorting contacts in required format
 					$sorted_contacts = array();
 				    foreach($contacts as $contact_email => $contact_name){
 				    	if($contact_email != $contact_name) {
 				    		$sorted_contacts[] = array('first_name' => $contact_name,
-				    			'email' => $contact_email);	
+				    			'email' => $contact_email);
 				    	} else {
 				    		$sorted_contacts[] = array('first_name' => '',
 				    			'email' => $contact_email);
 				    	}
 				    }
-				    //set sorted contacts in $request variable 
+				    //set sorted contacts in $request variable
 				    $request['users'] = $sorted_contacts;
 				} catch (Exception $e) {
 				    //$request['error'] = $e->getMessage();
@@ -211,17 +211,18 @@ class InvitesController extends InviteAppController {
 		    	App::import('Vendor','Refer', array('file' => 'Refer' . DS . 'Hotmail.php'));
 		    	$import = new Core_Hotmail();
 				$import->TempDir = getcwd() .DS. '..' .DS. 'tmp'.DS ;
-				$import->returnURL = Router::url('/', true) . 'referrals/index?return=true';
+				$import->returnURL = Router::url('/invite/invites/import_contacts/return:true/service:hotmail', true) ;
 				$import->WLLPolicy = Router::url('/', true) . 'privacy.php';
 				$import->WLLAPIid = '000000004004B922';
 				$import->WLLSecret = 'mo2NaE4fgPn2Km6UW2zpirBd4FnNVFSr';
-				
-				if (!isset($_REQUEST['return'])){
+
+
+				if (!isset($this->passedArgs['return'])){
 					header("Location: {$import->getWLLLink()}");
 				} else {
 					$contacts  = $import->getContacts();
 				}
-				
+
 				$sorted_contacts = array();
 				foreach($contacts as $contact) {
 				    $sorted_contacts[] = array(
@@ -233,9 +234,9 @@ class InvitesController extends InviteAppController {
 				break;
 
 			case 'Outlook':
-				
+
 		    	App::import('Vendor','Varien', array('file' => 'Varien' . DS . 'Csv.php'));
-		    	
+
 				$parser = new Varien_File_Csv();
 				$data = $parser->getData($this->request->data['Referral']['outlook']['tmp_name']);
 
@@ -246,7 +247,7 @@ class InvitesController extends InviteAppController {
 				    }
 				    $data[$i]['2'] = reset(explode(' ', $row['2']));
 				}
-				
+
 				$result = array();
 				if ($data) {
 				    $fields = $data[0];
@@ -263,7 +264,7 @@ class InvitesController extends InviteAppController {
 				        }
 				    }
 				}
-				
+
 				$emails = array();
 				foreach ($result as $user) {
 				    $name = trim($user['Name']);
@@ -273,11 +274,11 @@ class InvitesController extends InviteAppController {
 				        'email' => trim($user['E-mail']),
 				    );
 				}
-		    	
+
 				$request['users'] = $emails;
-				break;	
+				break;
 		}
-		
+
 		/*
 		//check if user already invited then remove from imported list
 		if(isset($request['users'])) {
@@ -285,13 +286,13 @@ class InvitesController extends InviteAppController {
 								'Referral.account_id' => $this->Auth->user('id')
 							)));
 			foreach($request['users'] as $ckey => $contacts) {
-				if(in_array($contacts['email'], $referrals)) 
-					unset($request['users'][$ckey]) ; 
-			}				
+				if(in_array($contacts['email'], $referrals))
+					unset($request['users'][$ckey]) ;
+			}
 		}
 		*/
-			
+
 		$this->set('contacts', $request);
 	}
-	
+
 }
