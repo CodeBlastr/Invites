@@ -6,7 +6,7 @@
 
 <h2>Invite Friends</h2>
 <?php
-	echo $this->Form->create('Invite');
+	echo $this->Form->create('Invite', array('action' => 'invitation'));
 	echo $this->Form->input('Invite.emails', array('label' => 'Email Addresses', 'after' => '<div class="floatRight divRightWidth">
 				<span class="textColorGrey">Import your contacts with their email addresses directly from your favorite mail service.</span>
 				<p><a href="#importContacts" value="Gmail" class="import"><img src="../images/email/gmail.gif" /></a>
