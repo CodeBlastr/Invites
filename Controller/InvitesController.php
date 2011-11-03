@@ -115,7 +115,7 @@ class InvitesController extends InviteAppController {
 
 		$login = isset($this->request->data['Referral']['login']) ? $this->request->data['Referral']['login'] : '' ;
 		$password = isset($this->request->data['Referral']['password']) ? $this->request->data['Referral']['password'] : '' ;
-		$service = isset($this->request->data['Referral']['service']) ? $this->request->data['Referral']['service'] : '' ;
+		$service = isset($this->request->data['Referral']['service']) ? $this->request->data['Referral']['service'] : $this->passedArgs['service'] ;
 
 		switch ($service) {
 			case 'Gmail':
@@ -161,7 +161,7 @@ class InvitesController extends InviteAppController {
 				} catch (Exception $e) {
 				    //$request['error'] = $e->getMessage();
 				    $this->Session->setFlash(__($e->getMessage(), true));
-					$this->redirect(array('action' => 'index'));
+					$this->redirect(array('action' => 'invitation'));
 				}
 		        break;
 		    case 'Aol':
@@ -204,18 +204,17 @@ class InvitesController extends InviteAppController {
 				} catch (Exception $e) {
 				    //$request['error'] = $e->getMessage();
 				    $this->Session->setFlash(__($e->getMessage(), true));
-					$this->redirect(array('action' => 'index'));
+					$this->redirect(array('action' => 'invitation'));
 				}
 		        break;
 		    case 'Hotmail':
 		    	App::import('Vendor','Refer', array('file' => 'Refer' . DS . 'Hotmail.php'));
 		    	$import = new Core_Hotmail();
 				$import->TempDir = getcwd() .DS. '..' .DS. 'tmp'.DS ;
-				$import->returnURL = Router::url('/invite/invites/import_contacts/return:true/service:hotmail', true) ;
+				$import->returnURL = Router::url('/invite/invites/import_contacts/return:true/service:Hotmail', true) ;
 				$import->WLLPolicy = Router::url('/', true) . 'privacy.php';
 				$import->WLLAPIid = '000000004004B922';
 				$import->WLLSecret = 'mo2NaE4fgPn2Km6UW2zpirBd4FnNVFSr';
-
 
 				if (!isset($this->passedArgs['return'])){
 					header("Location: {$import->getWLLLink()}");
