@@ -1,7 +1,12 @@
+
 <br />
 <h1>Invite with Facebook</h1>
 <br />
-<?php if ($this->Session->read('FB.uid')) { ?>        
+<?php // if ($this->Session->read('FB.uid')) { 
+	echo '<p>'.$fb_invite_info['fb_before_login_invite_text'].'</p>';
+	echo $this->Facebook->login(array('perms' => 'email,publish_stream', 
+			'redirect' => $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]. '/logged:true'));
+?>        
 	<fb:serverFbml>
 	<script type="text/fbml">
 	<fb:fbml>
@@ -18,9 +23,6 @@
 	</script>
 	</fb:serverFbml>
 <?php
-} else {
-	echo '<p>'.$fb_invite_info['fb_before_login_invite_text'].'</p>';
-	echo '<br />';
-	echo $this->Facebook->login(array('perms' => 'email,publish_stream', 'redirect' => $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]));
-}
+// } else {
+// } todo: arpan: find a way to show if user is logged in
 ?>
