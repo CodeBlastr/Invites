@@ -8,7 +8,8 @@ class InvitesController extends InviteAppController {
  * @var string
  * @access public
  */
-	var $name = 'Invites';
+	public $name = 'Invites';
+	public $uses = 'Invites.Invite';
 
 /**
  * Components used by this controller
@@ -16,8 +17,8 @@ class InvitesController extends InviteAppController {
  * @var array
  * @access public
  */
-	var $components = array( 'Auth', 'Session', 'Invite.InviteHandler');
-	var $helpers = array('Session','Facebook.Facebook');
+	public $components = array( 'Auth', 'Session', 'Invite.InviteHandler');
+	public $helpers = array('Session','Facebook.Facebook');
 /**
  * beforeFilter callback
  *
