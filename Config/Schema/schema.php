@@ -1,5 +1,5 @@
 <?php 
-class InviteSchema extends CakeSchema {
+class InvitesSchema extends CakeSchema {
 
 	public $renames = array();
 
