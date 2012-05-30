@@ -1,4 +1,5 @@
 <?php
+App::uses('InviteAppController', 'Invites.Controller');
 
 class InvitesController extends InviteAppController {
 
