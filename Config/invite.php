@@ -1,9 +1,9 @@
 <?php
 /**
- * Configuration setting for Invite plugin
+ * Configuration setting for Invites plugin
  *
  */
-$config['Invite'] = array(
+$config['Invites'] = array(
 
 /**
  * Enable or disable the invitation plugin
@@ -23,7 +23,7 @@ $config['Invite'] = array(
   	'token_length' => 20,
 
 /**
- * Name of the controller and action used for user-registration. Used after successfull token-validation
+ * Name of the controller and action used for user-registration. Used after successful token-validation
  */
 	'register_controller' => 'yourcontroller',
 	'register_action' => 'youraction',
@@ -48,8 +48,8 @@ $config['Invite'] = array(
  * - template: simply create your own template in /app/views/plugins/invite/email/invitation.ctp
  */
 	'email_options' => array(
-		'from'		=> 'Zuha Join My RFQ',
-		'return'		=> 'faheem@enbake.com',
+		'from'		=> 'From Name',
+		'return'	=> 'return@example.com',
 		'sendAs'	=> 'both',
 		'delivery'	=> 'mail',
 		'layout'		=> null,

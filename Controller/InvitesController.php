@@ -1,7 +1,7 @@
 <?php
-App::uses('InviteAppController', 'Invites.Controller');
+App::uses('InvitesAppController', 'Invites.Controller');
 
-class InvitesController extends InviteAppController {
+class InvitesController extends InvitesAppController {
 
 /**
  * Controller name
@@ -18,7 +18,7 @@ class InvitesController extends InviteAppController {
  * @var array
  * @access public
  */
-	public $components = array( 'Auth', 'Session', 'Invite.InviteHandler');
+	public $components = array( 'Auth', 'Session', 'Invites.InviteHandler');
 	public $helpers = array('Session','Facebook.Facebook');
 /**
  * beforeFilter callback
@@ -46,8 +46,13 @@ class InvitesController extends InviteAppController {
  * @return void
  * @access public
  */
-	public function index(){}
+	public function index(){
+		
+	}
 
+/**
+ * Invitation method
+ */
 	function invitation() {
 		//copy implementation fronm the following function
 		if(isset($this->request->data['Invite']['emails'])){
@@ -109,11 +114,11 @@ class InvitesController extends InviteAppController {
 		$this->set(compact('fb_invite_info'));
 	}
 
-	/*
-	 * Import Contacts is used to get contacts from different
-	 * email services eg. gmail, yahoo, hotmail
-	 * returns contacts array()
-	 */
+/**
+ * Import Contacts is used to get contacts from different
+ * email services eg. gmail, yahoo, hotmail
+ * returns contacts array()
+ */
 	function import_contacts(){
 		$request = array();
 

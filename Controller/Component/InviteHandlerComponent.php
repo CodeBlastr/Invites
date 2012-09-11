@@ -33,7 +33,7 @@ class InviteHandlerComponent extends Object {
  * @return void
  */
  	function startup(&$controller) {
-		Configure::load('Invite.invite');				//  make configuration available
+		Configure::load('Invites.invite');	// make configuration available
  		$this->controller =& $controller;	// make calling controller available in this component
  	}
 

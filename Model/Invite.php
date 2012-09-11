@@ -1,5 +1,5 @@
 <?php
-App::uses('InviteAppModel', 'Invites.Model');
+App::uses('InvitesAppModel', 'Invites.Model');
 
 class Invite extends InviteAppModel {
 /**
@@ -27,4 +27,3 @@ class Invite extends InviteAppModel {
 	);
 
 }
-?>
