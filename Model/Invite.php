@@ -1,7 +1,7 @@
 <?php
 App::uses('InvitesAppModel', 'Invites.Model');
 
-class Invite extends InviteAppModel {
+class Invite extends InvitesAppModel {
 /**
  * Name
  *

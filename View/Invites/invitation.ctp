@@ -1,25 +1,26 @@
 <?php 
-	echo $this->Html->script('/galleries/js/fancybox/jquery.mousewheel-3.0.4.pack'); 
-	echo $this->Html->script('/galleries/js/fancybox/jquery.fancybox-1.3.4.pack');	
-	echo $this->Html->css('/galleries/css/fancybox/jquery.fancybox-1.3.4');	
+	//echo $this->Html->script('/galleries/js/fancybox/jquery.mousewheel-3.0.4.pack'); 
+	//echo $this->Html->script('/galleries/js/fancybox/jquery.fancybox-1.3.4.pack');	
+	//echo $this->Html->css('/galleries/css/fancybox/jquery.fancybox-1.3.4');	
 ?>
 
 <h2>Invite Friends</h2>
 <?php
 	echo $this->Form->create('Invite', array('action' => 'invitation'));
-	echo $this->Form->input('Invite.emails', array('label' => 'Email Addresses', 'after' => '<div class="floatRight divRightWidth">
+	echo $this->Form->input('Invite.emails', array('label' => 'Email Addresses (comma separated)'));
+	/*echo $this->Form->input('Invite.emails', array('label' => 'Email Addresses', 'after' => '<div class="floatRight divRightWidth">
 				<span class="textColorGrey">Import your contacts with their email addresses directly from your favorite mail service.</span>
 				<p><a href="#importContacts" value="Gmail" class="import"><img src="../images/email/gmail.gif" /></a>
 				<a href="#importContacts" value="Yahoo" class="import"><img class="imgPointer" src="../images/email/yahoo.gif" /></a></p>
 				<p><a href="#importContacts" value="Hotmail" class="import"><img class="imgPointer" src="../images/email/msn-hotmail.png" /></a>
 				<a href="#importContacts" value="Aol" class="import"><img class="imgPointer" src="../images/email/aol.jpg" /></a></p>
 				<p><a href="#importContacts" value="Outlook" class="import"><img class="imgPointer" src="../images/email/outlook.gif" /></a></p>
-				</div>'));
-	echo $this->Form->button('Send!', array('type'=>'submit', 'class'=>'button'));
-	echo $this->Form->end();
+				</div>'));*/
+	echo $this->Form->end('Send!', array('class'=>'button'));
 ?>
 <?php  echo $this->Element('facebookInviter', array('fb_invite_info' => $fb_invite_info)); ?>
 
+<?php /*
 <!-- FancyBox Div for contacts import from different mail services -->
 
 <div style="display: none;">
@@ -146,4 +147,4 @@
 		});
 	});
 
-</script>
+</script> */ ?>
