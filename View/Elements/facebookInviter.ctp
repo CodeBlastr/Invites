@@ -7,7 +7,7 @@
 	//echo $this->Facebook->login(array('perms' => 'email,publish_stream', 'redirect' => $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]. '/logged:true'));
 ?>   
 
-<?php echo $this->Facebook->invite(); ?>     
+<?php echo $this->Facebook->invite($fb_invite_info); ?>     
 	
 	
 <?php /*	<fb:serverFbml>
