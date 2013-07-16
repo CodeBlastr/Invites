@@ -17,8 +17,11 @@
 				<p><a href="#importContacts" value="Outlook" class="import"><img class="imgPointer" src="../images/email/outlook.gif" /></a></p>
 				</div>'));*/
 	echo $this->Form->end('Send!', array('class'=>'button'));
-?>
-<?php  echo $this->Element('facebookInviter', array('fb_invite_info' => $fb_invite_info)); ?>
+
+	if ( !empty($fb_invite_info) ) {
+		echo $this->Element('facebookInviter', array('fb_invite_info' => $fb_invite_info));
+	}
+	?>
 
 <?php /*
 <!-- FancyBox Div for contacts import from different mail services -->

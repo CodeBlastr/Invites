@@ -19,7 +19,7 @@ class InvitesController extends InvitesAppController {
  * @access public
  */
 	public $components = array( 'Auth', 'Session', 'Invites.InviteHandler');
-	public $helpers = array('Session','Facebook.Facebook');
+	public $helpers = array('Session');
 /**
  * beforeFilter callback
  *
@@ -34,6 +34,12 @@ class InvitesController extends InvitesAppController {
 		$this->Auth->allow(array('index'));
 	}
 
+	public function __construct($request = null, $response = null) {
+		if ( CakePlugin::loaded('Facebook') ) {
+			$this->helpers[] = 'Facebook.Facebook';
+		}
+		parent::__construct($request, $response);
+	}
 
 /**
  * Display the basic invitation-screen /views/invite/index.ctp
@@ -103,15 +109,17 @@ class InvitesController extends InvitesAppController {
 		$user_id = $this->InviteHandler->getUserId();
 			//get referral_code
 		$reference_code = $this->Invite->User->generateReferalCode($user_id);
-		$fb_invite_info['fb_invite_action']="http://".$server_name;
-		$fb_invite_info['fb_invite_action_text']="Invite your friends to ".Inflector::humanize($_SERVER['SERVER_NAME'])."!";
-		$fb_invite_info['fb_invite_content'] = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).' <a href="http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code. '">by clicking here.</a>';
-		$fb_invite_info['fb_req_choice_yes_url'] = "http://".$server_name;
-		$fb_invite_info['fb_req_choice_no_url']= "http://".$server_name;
-		$fb_invite_info['fb_before_login_invite_text']="If you have a facebook account, you can easily invite your friends and email contacts to join you on your ".Inflector::humanize($_SERVER['SERVER_NAME'])." account.";
 
+		if ( CakePlugin::loaded('Facebook') ) {
+			$fb_invite_info['fb_invite_action'] = "http://".$server_name;
+			$fb_invite_info['fb_invite_action_text'] = "Invite your friends to ".Inflector::humanize($_SERVER['SERVER_NAME'])."!";
+			$fb_invite_info['fb_invite_content'] = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).' <a href="http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code. '">by clicking here.</a>';
+			$fb_invite_info['fb_req_choice_yes_url'] = "http://".$server_name;
+			$fb_invite_info['fb_req_choice_no_url'] = "http://".$server_name;
+			$fb_invite_info['fb_before_login_invite_text'] = "If you have a facebook account, you can easily invite your friends and email contacts to join you on your ".Inflector::humanize($_SERVER['SERVER_NAME'])." account.";
+			$this->set(compact('fb_invite_info'));
+		}
 
-		$this->set(compact('fb_invite_info'));
 	}
 
 /**
