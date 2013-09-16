@@ -9,6 +9,8 @@ class Invite extends InvitesAppModel {
  * @access public
  */
 	public $name = 'Invite';
+	
+	public $actsAs = array('Metable');
 
 /**
  * belongsTo association
