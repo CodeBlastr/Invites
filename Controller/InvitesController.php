@@ -60,44 +60,48 @@ class InvitesController extends InvitesAppController {
  * Invitation method
  */
 	function invitation() {
-		//copy implementation fronm the following function
-		if(isset($this->request->data['Invite']['emails'])){
-			$toemails = explode(",",trim($this->request->data['Invite']['emails'],","));
-			$emials = array();
+		if (isset($this->request->data['Invite']['emails'])) {
+			$toemails = explode(",", trim($this->request->data['Invite']['emails'], ","));
+			$emails = array();
 			$emails_tosave = '';
-			foreach($toemails as $email){
-				//TODO:validate $email
-				$emails[$email] = '';	//since no name is specified
-				$emails_tosave = $email.",";
+			foreach ($toemails as $email) {
+				$email = trim($email);
+				if (Validation::email($email)) {
+					$emails[$email] = '';	//since no name is specified
+					$emails_tosave = $email.",";
+				}
 			}
 			$emails_tosave = trim($emails_tosave,",");
 			$user_id = $this->InviteHandler->getUserId();
 			$this->request->data['Invite']['user_id'] = $user_id;
-			//get referral_code
 			$reference_code = $this->Invite->User->generateReferalCode($user_id);
 
 			$this->request->data['Invite']['emails'] = $emails_tosave;
 
-			if($this->Invite->save($this->request->data)){
+			if (!empty($emails) && $this->Invite->save($this->request->data)) {
 				$subject = Inflector::humanize($_SERVER['SERVER_NAME']);
 				$message = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).'! http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code;
-				$sentCount = $this->__sendMail($emails, $subject, $message,  'welcome');
+				$sentCount = $this->__sendMail($emails, $subject, $message, 'welcome');
 				$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.');
+			}
+			if (empty($emails)) {
+				$this->Session->setFlash('No valid email addresses provided.');
 			}
 		} else {
 			if (!empty($this->request->data['Referral'])) {
-				//check if email value is zero
+				// check if email value is zero
 				$emails = array();
-				foreach($this->request->data['Referral'] as $contact_key => $contact){
-					if($contact['email'] == '0')
+				foreach ($this->request->data['Referral'] as $contact_key => $contact) {
+					if ($contact['email'] == '0') {
 						unset($this->request->data['Referral'][$contact_key]);
-					else
+					} else {
 						$emails[$contact_key] = $contact;
+					}
 				}
 
 				$email_str = '';
-				//create a formated string to send emails
-				foreach($emails as $email){
+				// create a formatted string to send emails
+				foreach ($emails as $email) {
 					$email_str .= $email['email'] . ',';
 				}
 				$this->request->data['Invite']['emails'] = $email_str;
@@ -107,10 +111,9 @@ class InvitesController extends InvitesAppController {
 		$fb_invite_info = array();
 		$server_name = env("SERVER_NAME");
 		$user_id = $this->InviteHandler->getUserId();
-			//get referral_code
 		$reference_code = $this->Invite->User->generateReferalCode($user_id);
 
-		if ( CakePlugin::loaded('Facebook') ) {
+		if (CakePlugin::loaded('Facebook')) {
 			$fb_invite_info['fb_invite_action'] = "http://".$server_name;
 			$fb_invite_info['fb_invite_action_text'] = "Invite your friends to ".Inflector::humanize($_SERVER['SERVER_NAME'])."!";
 			$fb_invite_info['fb_invite_content'] = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).' <a href="http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code. '">by clicking here.</a>';
