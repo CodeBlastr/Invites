@@ -35,7 +35,7 @@ class InvitesController extends InvitesAppController {
 	}
 
 	public function __construct($request = null, $response = null) {
-		if ( CakePlugin::loaded('Facebook') ) {
+		if (CakePlugin::loaded('Facebook')) {
 			$this->helpers[] = 'Facebook.Facebook';
 		}
 		parent::__construct($request, $response);
@@ -71,22 +71,23 @@ class InvitesController extends InvitesAppController {
 					$emails_tosave = $email.",";
 				}
 			}
-			$emails_tosave = trim($emails_tosave,",");
-			$user_id = $this->InviteHandler->getUserId();
-			$this->request->data['Invite']['user_id'] = $user_id;
-			$reference_code = $this->Invite->User->generateReferalCode($user_id);
-
-			$this->request->data['Invite']['emails'] = $emails_tosave;
-
-			if (!empty($emails) && $this->Invite->save($this->request->data)) {
-				$subject = Inflector::humanize($_SERVER['SERVER_NAME']);
-				$message = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).'! http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code;
-				$sentCount = $this->__sendMail($emails, $subject, $message, 'welcome');
-				$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.');
-			}
+			
 			if (empty($emails)) {
-				$this->Session->setFlash('No valid email addresses provided.');
+				$this->Session->setFlash('No valid email addresses provided.', 'flash_danger');
+			} else {
+				$emails_tosave = trim($emails_tosave,",");
+				$user_id = $this->InviteHandler->getUserId();
+				$reference_code = $this->Invite->User->generateReferalCode($user_id);
+				$this->request->data['Invite']['user_id'] = $user_id;
+				$this->request->data['Invite']['emails'] = $emails_tosave;
+				if ($this->Invite->save($this->request->data)) {
+					$subject = Inflector::humanize($_SERVER['SERVER_NAME']);
+					$message = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).'! http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code;
+					$sentCount = $this->__sendMail($emails, $subject, $message, 'welcome');
+					$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.', 'flash_success');
+				}
 			}
+			
 		} else {
 			if (!empty($this->request->data['Referral'])) {
 				// check if email value is zero
