@@ -59,7 +59,7 @@ class InvitesController extends InvitesAppController {
 /**
  * Invitation method
  */
-	function invitation() {
+	public function invitation($model = false, $foreignKey = false) {
 		if (isset($this->request->data['Invite']['emails'])) {
 			$toemails = explode(",", trim($this->request->data['Invite']['emails'], ","));
 			$emails = array();
@@ -109,6 +109,9 @@ class InvitesController extends InvitesAppController {
 			}
 		}
 
+		$this->set('related', ($model && $foreignKey) ? array('model' => $model, 'foreign_key' => $foreignKey) : false);
+		
+		
 		$fb_invite_info = array();
 		$server_name = env("SERVER_NAME");
 		$user_id = $this->InviteHandler->getUserId();
@@ -131,7 +134,7 @@ class InvitesController extends InvitesAppController {
  * email services eg. gmail, yahoo, hotmail
  * returns contacts array()
  */
-	function import_contacts(){
+	public function import_contacts(){
 		$request = array();
 
 		$login = isset($this->request->data['Referral']['login']) ? $this->request->data['Referral']['login'] : '' ;

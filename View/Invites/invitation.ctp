@@ -16,9 +16,14 @@
 				<a href="#importContacts" value="Aol" class="import"><img class="imgPointer" src="../images/email/aol.jpg" /></a></p>
 				<p><a href="#importContacts" value="Outlook" class="import"><img class="imgPointer" src="../images/email/outlook.gif" /></a></p>
 				</div>'));*/
+				
+	if ($related) {
+		echo $this->Form->hidden('Invite.Meta.model', array('value' => $related['model']));
+		echo $this->Form->hidden('Invite.Meta.foreign_key', array('value' => $related['foreign_key']));
+	}
 	echo $this->Form->end('Send!', array('class'=>'button'));
 
-	if ( !empty($fb_invite_info) ) {
+	if (!empty($fb_invite_info)) {
 		echo $this->Element('facebookInviter', array('fb_invite_info' => $fb_invite_info));
 	}
 	?>
