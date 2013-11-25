@@ -1,7 +1,7 @@
 <?php
 App::uses('InvitesAppController', 'Invites.Controller');
 
-class InvitesController extends InvitesAppController {
+class AppInvitesController extends InvitesAppController {
 
 /**
  * Controller name
@@ -58,6 +58,9 @@ class InvitesController extends InvitesAppController {
 
 /**
  * Invitation method
+ * 
+ * @param string $model			Will associate the invite with this model/key, by using Metable
+ * @param string $foreignKey	""
  */
 	public function invitation($model = false, $foreignKey = false) {
 		if (isset($this->request->data['Invite']['emails'])) {
@@ -83,8 +86,12 @@ class InvitesController extends InvitesAppController {
 				if ($this->Invite->save($this->request->data)) {
 					$subject = Inflector::humanize($_SERVER['SERVER_NAME']);
 					$message = 'Join me over at '.Inflector::humanize($_SERVER['SERVER_NAME']).'! http://' . $_SERVER['SERVER_NAME'] . '/users/users/register/referal_code:' . $reference_code;
-					$sentCount = $this->__sendMail($emails, $subject, $message, 'welcome');
-					$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.', 'flash_success');
+					try {
+						$sentCount = $this->__sendMail($emails, $subject, $message, 'welcome');
+						$this->Session->setFlash('Invitation sent to '.$sentCount.' persons.', 'flash_success');
+					} catch (Exception $e) {
+						$this->Session->setFlash($e->getMessage(), 'flash_danger');
+					}
 				}
 			}
 			
@@ -318,4 +325,8 @@ class InvitesController extends InvitesAppController {
 		$this->set('contacts', $request);
 	}
 
+}
+
+if (!isset($refuseInit)) {
+	class InvitesController extends AppInvitesController {}
 }
