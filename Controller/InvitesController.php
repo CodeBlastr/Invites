@@ -10,7 +10,10 @@ class AppInvitesController extends InvitesAppController {
  * @access public
  */
 	public $name = 'Invites';
+
 	public $uses = 'Invites.Invite';
+	
+	public $allowedActions = array('accept');
 
 /**
  * Components used by this controller
@@ -18,7 +21,8 @@ class AppInvitesController extends InvitesAppController {
  * @var array
  * @access public
  */
-	public $components = array( 'Auth', 'Session', 'Invites.InviteHandler');
+	public $components = array('Auth', 'Session', 'Invites.InviteHandler');
+
 	public $helpers = array('Session');
 /**
  * beforeFilter callback
@@ -323,6 +327,27 @@ class AppInvitesController extends InvitesAppController {
 		*/
 
 		$this->set('contacts', $request);
+	}
+
+/**
+ * Accept method
+ * 
+ */
+	public function accept($inviteId = null){
+		if($this->request->is('get') && !empty($inviteId)) {
+			if(!$this->Auth->loggedIn()){
+				$this->Session->write('Auth.redirect', array('plugin' => 'invites', 'controller' => 'invites', 'action' => 'accept', $inviteId));
+				$this->redirect(Router::url(array('plugin' => 'users', 'controller' => 'users', 'action' => 'register')));
+			} else {
+				try {
+					$this->Invite->processInvite($inviteId);
+					$this->Session->setFlash('Invite accepted');
+					$this->redirect(array('plugin' => 'users', 'controller' => 'users', 'action' => 'my'));
+				} catch (Exception $e) {
+					$this->Session->setFlash($e->getMessage(), 'flash_danger');
+				}
+			}
+		}
 	}
 
 }
