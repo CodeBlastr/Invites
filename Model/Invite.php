@@ -31,17 +31,17 @@ class Invite extends InvitesAppModel {
 /**
  * Process Invite Data
  */
- 	public function processInvite($inviteId) {
+ 	public function processInvite($inviteId, $userId) {
 		$invite = $this->find('first', array('conditions' => array('Invite.id' => $inviteId, 'Invite.status' => 0)));
 		if(!empty($invite)) {
 			App::uses($invite['Invite']['model'], ZuhaInflector::pluginize($invite['Invite']['model']) . '.Model');
 			$Model = new $invite['Invite']['model']();
 	 		if(method_exists($Model,'processInvite') && is_callable(array($Model, 'processInvite'))) {
-				if ($Model->processInvite($invite)) {
-					$this->_updateStatus($inviteId, 1, CakeSession::read('Auth.User.id'));
+				if ($Model->processInvite($invite, $userId)) {
+					$this->_updateStatus($inviteId, 1, $userId);
 				}
 			} else {
-				$this->_updateStatus($inviteId, 1, CakeSession::read('Auth.User.id'));
+				$this->_updateStatus($inviteId, 1, $userId);
 			}
 		} else {
 			throw new Exception(__('Invite invalid'));
@@ -57,8 +57,8 @@ class Invite extends InvitesAppModel {
 		if(!empty($row) && $row['Invite']['status'] <= 0){
 			$data = array(
 				'Invite'=>array(
-					'status'=> $status,
-					'user_id'=>$userId,
+					'status' => $status,
+					'user_id' => $userId,
 				),
 			);
 			return $this->save($data);

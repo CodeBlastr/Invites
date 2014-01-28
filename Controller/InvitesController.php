@@ -340,7 +340,7 @@ class AppInvitesController extends InvitesAppController {
 				$this->redirect(Router::url(array('plugin' => 'users', 'controller' => 'users', 'action' => 'register')));
 			} else {
 				try {
-					$this->Invite->processInvite($inviteId);
+					$this->Invite->processInvite($inviteId, $this->Session->read('Auth.User.id'));
 					$this->Session->setFlash('Invite accepted');
 					$this->redirect(array('plugin' => 'users', 'controller' => 'users', 'action' => 'my'));
 				} catch (Exception $e) {
