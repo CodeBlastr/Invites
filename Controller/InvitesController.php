@@ -23,7 +23,13 @@ class AppInvitesController extends InvitesAppController {
  */
 	public $components = array('Auth', 'Session', 'Invites.InviteHandler');
 
+/**
+ * Helpers
+ * 
+ * $var array
+ */
 	public $helpers = array('Session');
+
 /**
  * beforeFilter callback
  *
@@ -38,6 +44,10 @@ class AppInvitesController extends InvitesAppController {
 		$this->Auth->allow(array('index'));
 	}
 
+/**
+ * Constructor
+ * 
+ */
 	public function __construct($request = null, $response = null) {
 		if (CakePlugin::loaded('Facebook')) {
 			$this->helpers[] = 'Facebook.Facebook';
@@ -336,7 +346,14 @@ class AppInvitesController extends InvitesAppController {
 	public function accept($inviteId = null){
 		if($this->request->is('get') && !empty($inviteId)) {
 			if(!$this->Auth->loggedIn()){
+				$this->Session->write('afterUserCreated.method', 'processInvite');
+				$this->Session->write('afterUserCreated.model', 'Invites.Invite');
+				$this->Session->write('afterUserCreated.data', $inviteId);
+				$this->Session->write('afterUserLogin.method', 'processInvite');
+				$this->Session->write('afterUserLogin.model', 'Invites.Invite');
+				$this->Session->write('afterUserLogin.data', $inviteId);
 				$this->Session->write('Auth.redirect', array('plugin' => 'invites', 'controller' => 'invites', 'action' => 'accept', $inviteId));
+				$this->Session->setFlash('Please create an account to accept your invite.');
 				$this->redirect(Router::url(array('plugin' => 'users', 'controller' => 'users', 'action' => 'register')));
 			} else {
 				try {
