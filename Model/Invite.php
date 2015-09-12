@@ -1,7 +1,7 @@
 <?php
 App::uses('InvitesAppModel', 'Invites.Model');
 
-class Invite extends InvitesAppModel {
+class AppInvite extends InvitesAppModel {
 /**
  * Name
  *
@@ -25,13 +25,39 @@ class Invite extends InvitesAppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Creator' => array(
+			'className' => 'Users.User',
+			'foreignKey' => 'creator_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 
 /**
+ * After find callback
+ * 
+ */
+ 	public function afterFind($results = array(), $primary = false) {
+ 		// decode data field
+		if (!empty($results[0])) {
+			// many results
+	 		for ($i=0; $i < count($results); $i++) {
+	 			$results[$i][$this->alias]['data'] = json_decode($results[$i][$this->alias]['data'], true);
+			}
+		} elseif (!empty($results[$this->alias])) {
+			// just one
+	 		$results[$this->alias]['data'] = json_decode($results[$this->alias]['data'], true);
+		}
+		return parent::afterFind($results, $primary);
+ 	}
+
+/**
  * Process Invite Data
  */
- 	public function processInvite($inviteId, $userId) {
+ 	public function processInvite($inviteId, $userId = null) {
+ 		$userId = !empty($userId) ? $userId : CakeSession::read('Auth.User.id');
 		$invite = $this->find('first', array('conditions' => array('Invite.id' => $inviteId, 'Invite.status' => 0)));
 		if(!empty($invite)) {
 			App::uses($invite['Invite']['model'], ZuhaInflector::pluginize($invite['Invite']['model']) . '.Model');
@@ -52,11 +78,12 @@ class Invite extends InvitesAppModel {
  * Update Status method
  * 
  */
-	private function _updateStatus($inviteId, $status, $userId = null){
-		$row = $this->read(array('status'),$inviteId);
-		if(!empty($row) && $row['Invite']['status'] <= 0){
+	public function _updateStatus($inviteId, $status, $userId = null) {
+		$invite = $this->find('first', array('conditions' => array('Invite.id' => $inviteId)));
+		if(!empty($invite) && $invite['Invite']['status'] <= 0){
 			$data = array(
-				'Invite'=>array(
+				'Invite'=> array(
+					'id' => $invite['Invite']['id'],
 					'status' => $status,
 					'user_id' => $userId,
 				),
@@ -79,7 +106,7 @@ class Invite extends InvitesAppModel {
  * @param $inviteId
  */
 	public function decline($inviteId, $userId = null){
-		$this->_updateStatus($inviteId,-1,$userId);
+		$this->_updateStatus($inviteId, -1, $userId);
 	}
 
 /**
@@ -96,4 +123,8 @@ class Invite extends InvitesAppModel {
 			));
 	}
 
+}
+
+if (!isset($refuseInit)) {
+	class Invite extends AppInvite {}
 }
